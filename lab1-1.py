@@ -42,10 +42,13 @@ def printURLInfo(response: requests.Response):
 
 def main():
     url = getURL()
-    with performRequest(url) as response:
-        printResponseHeaders(response)
-        print("---------------------")
-        printURLInfo(response)
+    try:
+        with performRequest(url) as response:
+            printResponseHeaders(response)
+            print("---------------------")
+            printURLInfo(response)
+    except Exception as e:
+        print("An exception has occurred.", e.args)
 
 if __name__ == "__main__":
     main()
