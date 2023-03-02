@@ -23,11 +23,11 @@ def printURLInfo(response: requests.Response):
         cookies = response.raw.headers.getlist("Set-Cookie")
         for i, cookie in enumerate(cookies):
             cookieData = cookie.split(';')
-            print(f"{i+1:2d}.\tName: {cookieData[0].split('=')[0]}\t ", end="")
+            print(f"{i+1:2d}.\tName: {cookieData[0].split('=')[0]}")
             try:
-                print(f"Expires: {next(datum.split('=')[1] for datum in cookieData if 'Expires' in datum)}")
+                print(f"\tExpires: {next(datum.split('=')[1] for datum in cookieData if 'Expires' in datum or 'expires' in datum)}")
             except StopIteration:
-                print("Undefined expiration date.")
+                print("\tUndefined expiration date.")
     else:
         print("The website did not send any cookies.")
 
