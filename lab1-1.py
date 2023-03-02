@@ -18,12 +18,27 @@ def printURLInfo(response: requests.Response):
         print(f"Web server: {response.headers['Server']}")
     else:
         print("The website does not specify a web server.")
-    if len(response.cookies) == 0:
-        print("The website did not send any cookies.")
-    else:
+    if 'Set-Cookie' in response.headers:
         print("Cookies info:")
-        for i, cookie in enumerate(response.cookies):
-            print(f"{i+1:2d}.\tName: {cookie.name}\tExpires: {datetime.fromtimestamp(cookie.expires) if cookie.expires is not None else 'Undefined expiration date'}")
+        cookies = response.raw.headers.getlist("Set-Cookie")
+        for i, cookie in enumerate(cookies):
+            cookieData = cookie.split(';')
+            print(f"{i+1:2d}.\tName: {cookieData[0].split('=')[0]}\t ", end="")
+            try:
+                print(f"Expires: {next(datum.split('=')[1] for datum in cookieData if 'Expires' in datum)}")
+            except StopIteration:
+                print("Undefined expiration date.")
+    else:
+        print("The website did not send any cookies.")
+
+    # This method does not find cookies without value.
+
+    # if len(response.cookies) == 0:
+    #     print("The website did not send any cookies.")
+    # else:
+    #     print("Cookies info:")
+    #     for i, cookie in enumerate(response.cookies):
+    #         print(f"{i+1:2d}.\tName: {cookie.name}\tExpires: {datetime.fromtimestamp(cookie.expires) if cookie.expires is not None else 'Undefined expiration date'}")
 
 def main():
     url = getURL()
