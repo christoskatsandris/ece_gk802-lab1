@@ -23,7 +23,7 @@ def printURLInfo(response: requests.Response):
     else:
         print("Cookies info:")
         for i, cookie in enumerate(response.cookies):
-            print(f"{i+1:2d}.\tName: {cookie.name}\tExpires: {datetime.fromtimestamp(cookie.expires)}")
+            print(f"{i+1:2d}.\tName: {cookie.name}\tExpires: {datetime.fromtimestamp(cookie.expires) if cookie.expires is not None else 'Undefined expiration date'}")
 
 def main():
     url = getURL()
